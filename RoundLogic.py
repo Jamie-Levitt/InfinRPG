@@ -1,4 +1,5 @@
 from CharacterLogic import Character, getCharacterClasses
+from MapLogic import genPaths
 
 class RoundManager:
     def __init__(self):
@@ -12,7 +13,7 @@ class RoundManager:
         print('Classes Info:')
         for i, charClass in enumerate(classRef):
             classList.append(charClass.className.lower())
-            inpAddon = '[' + charClass.className + ']/' if i < len(classRef) - 1 else '[' + charClass.className + '])'
+            inpAddon = '[' + charClass.className + ']/' if i < len(classRef) - 1 else '[' + charClass.className + ']) '
             inpStr += inpAddon
             print('[' + charClass.className + ']')
             print(charClass.getStatsRef())
@@ -30,6 +31,23 @@ class RoundManager:
 
     def initNewRound(self):
         self.round = self.round + 1
+        chosen = False
+        while chosen is False:
+            pathNames = []
+            paths = genPaths(self.round)
+            pPPstr = 'Choose a path to follow: ('
+            for i, node in enumerate(paths):
+                pathNames.append(node.nodeName.lower())
+                pPPAppend = '[' + node.nodeName + ']/' if i < len(paths) - 1 else '[' + node.nodeName + ']) '
+                pPPstr += pPPAppend
+
+            playerPathPick = input(pPPstr)
+            if playerPathPick in pathNames:
+                chosenNode = paths[pathNames.index(playerPathPick)]
+                chosen = True
+            else:
+                print('THAT IS NOT A VALID PATH NAME, PLEASE RETRY:')
+        print(chosenNode.items)
 
     #region PROPERTIES
     @property
