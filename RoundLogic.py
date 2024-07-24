@@ -1,5 +1,6 @@
 from CharacterLogic import Character, Class, getClassesInfo, getClassByCode
 from MapLogic import genPaths
+from ItemLogic import Item
 
 class RoundManager:
     def __init__(self):
@@ -34,6 +35,7 @@ class RoundManager:
 
     def initNewRound(self):
         self.round = self.round + 1
+        print(str(self.round) + ' | ' + str(self.player.inventory))
         chosen = False
         while chosen is False:
             pathNames = []
@@ -50,7 +52,9 @@ class RoundManager:
                 chosen = True
             else:
                 print('THAT IS NOT A VALID PATH NAME, PLEASE RETRY:')
-        for statref in chosenNode.items: print(statref.getStatsRef())
+        response = chosenNode.initNodeFunc(self.player.purse)
+        if type(response) is Item:
+            self.player.addToInventory(response)
 
     #region PROPERTIES
     @property

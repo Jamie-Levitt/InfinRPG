@@ -1,5 +1,7 @@
 from enum import Enum
 
+from ItemLogic import Item
+
 class Class:
     def __init__(self, code:str, name:str, baseHealth:int, statName:str):
         self.code = code
@@ -53,6 +55,12 @@ class Character:
         self.charClass = charClass
         self.level = 1
         self.maxHealth = charClass.baseHealth
+        self.purse = 5
+        self.inventory = []
+
+    def buyItem(self, item:Item):
+        self.purse = -item.value
+        self.addToInventory(item)
 
     #region PROPERTIES
     @property
@@ -67,6 +75,21 @@ class Character:
     @charClass.setter
     def charClass(self, charClass:Class):
         self.__charClass = charClass
+
+    @property
+    def purse(self) -> int:
+        return self.__purse
+    @purse.setter
+    def purse(self, purse:int):
+        self.__purse = purse
+    @property
+    def inventory(self) -> list[type[Item]]:
+        return self.__inventory
+    @inventory.setter
+    def inventory(self, inventory:list[type[Item]]):
+        self.__inventory = inventory
+    def addToInventory(self, item:Item):
+        self.__inventory.append(item)
 
     @property
     def level(self) -> int:

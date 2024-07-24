@@ -6,10 +6,11 @@ from Attributes import genRandAttribute, SwordAttributes
 pi = list('3141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067')
 
 class Item:
-    def __init__(self, level:int, baseName:str, value:int):
+    def __init__(self, level:int, baseName:str, value:int, stat:str):
         self.baseName = baseName 
         self.level = level
         self.value = value
+        self.stat = stat
         self.genAttribute()
 
     def genAttribute(self):
@@ -20,7 +21,7 @@ class Item:
         return
     
     def getStatsRef(self) -> str:
-        return "NAME: {" + self.name + "} LEVEL: {" + str(self.level) + "} " + self.stat.upper() + ": {" + str(self.statAmount) + "}"
+        return "NAME: {" + self.name + "} LEVEL: {" + str(self.level) + "} " + self.stat.upper() + ": {" + str(self.statAmount) + "} PRICE: {" + str(self.value) + "}"
 
     #region PROPERTIES
     @property
@@ -34,7 +35,7 @@ class Item:
         return self.__name
     @name.setter
     def name(self, attributeName:str):
-        self.__name = attributeName + '' + self.baseName
+        self.__name = attributeName + ' ' + self.baseName
 
     @property
     def classCode(self) -> str:
@@ -84,4 +85,30 @@ class Shop():
         self.coins = randint(1, 11 - int(pi[(roundNum % len(pi))])) * roundNum
         self.items = []
         for i in range(3):
-            self.items.append(Item(roundNum, 'Sword', 2))
+            self.items.append(Item(roundNum, 'Sword', 2, 'Power'))
+    
+    def initNodeFunc(self, playerPurse:int):
+        print("\nYour Purse: {" + str(playerPurse) + "} ----------------------------------\n")
+        print("Welcome to my shop, let me show you my wares ----------------------------\n")
+
+        itemNums = []
+        inpOptions = 'CHOOSE AN OPTION ('
+        for i, item in enumerate(self.items):
+            itemNums.append(str(i))
+            inpAddon = '[' + str(i) + '],' if i < len(self.items) - 1 else '[' + str(i) + '],[INVENTORY],[LEAVE])'
+            inpOptions += inpAddon
+            print('[' + str(i) + ']: ' + item.getStatsRef())
+
+        chosen = False
+        while chosen is False:
+            playerChoice = input(inpOptions).lower()
+            if playerChoice == 'leave':
+                return 'EXIT'
+            elif playerChoice in itemNums:
+                item = self.items[i]
+                if item.value <= playerPurse:
+                    return item
+                else:
+                    print("You can't afford that, please choose another item")
+            else:
+                print("THAT IS NOT A VALID CHOICE, PLEASE RETRY:")
