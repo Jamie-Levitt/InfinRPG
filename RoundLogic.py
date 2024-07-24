@@ -1,4 +1,4 @@
-from CharacterLogic import Character, getCharacterClasses
+from CharacterLogic import Character, Class, Stat, getClassesInfo
 from MapLogic import genPaths
 
 class RoundManager:
@@ -9,17 +9,21 @@ class RoundManager:
     def startUp(self):
         inpStr = 'Choose your class ('
         classList = []
-        classRef = getCharacterClasses()
+        classRef = getClassesInfo()
         print('Classes Info:')
-        for i, charClass in enumerate(classRef):
-            classList.append(charClass.className.lower())
-            inpAddon = '[' + charClass.className + ']/' if i < len(classRef) - 1 else '[' + charClass.className + ']) '
+        for i, classInfo in enumerate(classRef):
+            className = classInfo[0]
+            classStats = classInfo[1]
+            classList.append(className.lower())
+            inpAddon = '[' + className + ']/' if i < len(classRef) - 1 else '[' + className + ']) '
             inpStr += inpAddon
-            print('[' + charClass.className + ']')
-            print(charClass.getStatsRef())
+            print('[' + className + ']')
+            print(classStats)
 
         chosenClass = input(inpStr).lower()
         if chosenClass in classList:
+            stat = Stat()
+            classRef = Cl
             self.player = classRef[classList.index(chosenClass)]
         else:
             print('THAT IS NOT A VALID CLASS NAME, PLEASE RETRY:')
