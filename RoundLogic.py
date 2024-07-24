@@ -1,4 +1,4 @@
-from CharacterLogic import Character, Class, Stat, getClassesInfo
+from CharacterLogic import Character, Class, getClassesInfo, getClassByCode
 from MapLogic import genPaths
 
 class RoundManager:
@@ -9,29 +9,28 @@ class RoundManager:
     def startUp(self):
         inpStr = 'Choose your class ('
         classList = []
-        classRef = getClassesInfo()
+        classCodeList = []
+        classRefList = getClassesInfo()
         print('Classes Info:')
-        for i, classInfo in enumerate(classRef):
-            className = classInfo[0]
-            classStats = classInfo[1]
+        for i, classRef in enumerate(classRefList):
+            className = classRef.name.upper()
             classList.append(className.lower())
-            inpAddon = '[' + className + ']/' if i < len(classRef) - 1 else '[' + className + ']) '
+            classCodeList.append(classRef.code)
+            inpAddon = '[' + className.upper() + ']/' if i < len(classRefList) - 1 else '[' + className.upper() + ']) '
             inpStr += inpAddon
-            print('[' + className + ']')
-            print(classStats)
+            print('[' + className.upper() + ']')
+            print(classRef.getStatsRef())
 
         chosenClass = input(inpStr).lower()
         if chosenClass in classList:
-            stat = Stat()
-            classRef = Cl
-            self.player = classRef[classList.index(chosenClass)]
+            playerClass = getClassByCode(classCodeList[classList.index(chosenClass)])
         else:
             print('THAT IS NOT A VALID CLASS NAME, PLEASE RETRY:')
             self.startUp()
 
-        self.player.name = input('What is your name? ')
-
-        print('And thus begins the journy of ' + self.player.name + ' the ' + self.player.className)
+        playerName = input('What is your name? ')
+        self.player = Character(playerName, playerClass)        
+        print('And thus begins the journy of ' + self.player.name + ' the ' + self.player.charClass.name)
 
     def initNewRound(self):
         self.round = self.round + 1
@@ -45,13 +44,13 @@ class RoundManager:
                 pPPAppend = '[' + node.nodeName + ']/' if i < len(paths) - 1 else '[' + node.nodeName + ']) '
                 pPPstr += pPPAppend
 
-            playerPathPick = input(pPPstr)
+            playerPathPick = input(pPPstr).lower()
             if playerPathPick in pathNames:
                 chosenNode = paths[pathNames.index(playerPathPick)]
                 chosen = True
             else:
                 print('THAT IS NOT A VALID PATH NAME, PLEASE RETRY:')
-        print(chosenNode.items)
+        for statref in chosenNode.items: print(statref.getStatsRef())
 
     #region PROPERTIES
     @property

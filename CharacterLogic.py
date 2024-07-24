@@ -1,30 +1,15 @@
 from enum import Enum
 
-class Stat:
-    def __init__(self, name:str):
-        self.name = name
-        self.amount = 1
-    
-    @property
-    def name(self) -> str:
-        return self.__name
-    @name.setter
-    def name(self, name:str):
-        self.__name = name
-
-    @property
-    def amount(self) -> int:
-        return self.__amount
-    @amount.setter
-    def amount(self, amount:int):
-        self.__amount = amount
-
 class Class:
-    def __init__(self, code:str, name:str, baseHealth:int, stat:Stat):
+    def __init__(self, code:str, name:str, baseHealth:int, statName:str):
         self.code = code
         self.name = name
         self.baseHealth = baseHealth
-        self.stat = stat
+        self.statName = statName
+        self.statAmount = 1
+
+    def getStatsRef(self) -> str:
+        return "BASE HEALTH: {" + str(self.baseHealth) + "}, " + self.statName.upper() + " {" + str(self.statAmount) + "}"
         
     #region PROPERTIES
     @property
@@ -48,11 +33,18 @@ class Class:
         self.__baseHealth = baseHealth
 
     @property
-    def stat(self) -> Stat:
-        return self.__stat
-    @stat.setter
-    def stat(self, stat:Stat):
-        self.__stat = stat
+    def statName(self) -> str:
+        return self.__statName
+    @statName.setter
+    def statName(self, statName:str):
+        self.__statName = statName
+
+    @property
+    def statAmount(self) -> int:
+        return self.__statAmount
+    @statAmount.setter
+    def statAmount(self, statAmount:int):
+        self.__statAmount = statAmount
     #endregion
 
 class Character:
@@ -61,9 +53,6 @@ class Character:
         self.charClass = charClass
         self.level = 1
         self.maxHealth = charClass.baseHealth
-    
-    def getStatsRef(self) -> dict:
-        return "MAX HEALTH: {" + str(self.maxHealth) + "}, " + self.stat.name.upper() + " {" + str(self.stat.amount) + "}"
 
     #region PROPERTIES
     @property
@@ -102,56 +91,22 @@ class Character:
         self.__health = health
     #endregion
 
-class Warrior(Character):
-    def __init__(self):
-        super().__init__('Warrior')
-        self.maxHealth = 1
-        self.strength = 1
-
-    def getStatsRef(self) -> dict:
-        return "MAX HEALTH: {" + str(self.maxHealth) + "} STRENGTH: {" + str(self.maxHealth) + "}"
-
-    #region PROPERTIES
-    @property
-    def strength(self) -> int:
-        return self.__strength
-    @strength.setter
-    def strength(self, strength:int):
-        self.__strength = strength
-    #endregion
-
-class Wizard(Character):
-    def __init__(self):
-        super().__init__('Wizard')
-        self.maxHealth = 1
-        self.mana = 1
-
-    def getStatsRef(self) -> dict:
-        return "MAX HEALTH: {" + str(self.maxHealth) + "} MANA: {" + str(self.mana) + "}"
-
-    #region PROPERTIES
-    @property
-    def mana(self) -> int:
-        return self.__mana
-    @mana.setter
-    def mana(self, mana:int):
-        self.__mana = mana
-    #endregion
-
 from FileLogic import loadClasses
 
-def getClassesInfo() -> list:
+def getClassesInfo() -> list[type[Class]]:
     classInfoList = []
     for classItem in loadClasses():
         classData = classItem[1]
-        classStat = Stat(classData['Stat'])
-        classInfoList.append([classData['Name'], "BASE HEALTH: {" + str(classData['Base Health']) + "}" + classStat.name + ": {" + str(classStat.amount) + "}"])
+        classInfoList.append(Class(classItem[0], classData['Name'], classData['Base Health'], classData['Stat']))
     return classInfoList
 
+def getClassByCode(classCode:str) -> Class:
+    for classItem in loadClasses():
+        if classItem[0] == classCode:
+            return Class(classItem[0], classItem[1]['Name'], classItem[1]['Base Health'], classItem[1]['Stat'])
+
 def newCharFromClass(classInfo:list, charName:str) -> Character:
-    classCode = classInfo[0]
     classData = classInfo[1]
 
-    classStat = Stat(classData['Stat'])
-    charClass = Class(classCode, classData['Name'], classData['Base Health'], classStat)
+    charClass = Class(classInfo[0], classData['Name'], classData['Base Health'], classData['Stat'])
     return Character(charName, charClass)

@@ -6,14 +6,21 @@ from Attributes import genRandAttribute, SwordAttributes
 pi = list('3141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067')
 
 class Item:
-    def __init__(self, level:int, baseName:str, baseValue:int):
+    def __init__(self, level:int, baseName:str, value:int):
         self.baseName = baseName 
         self.level = level
-        self.baseValue = baseValue
+        self.value = value
         self.genAttribute()
 
     def genAttribute(self):
+        att = genRandAttribute(SwordAttributes)
+        self.name = att.name
+        self.value = att.value['Value']
+        self.statAmount = att.value['Power']
         return
+    
+    def getStatsRef(self) -> str:
+        return "NAME: {" + self.name + "} LEVEL: {" + str(self.level) + "} " + self.stat.upper() + ": {" + str(self.statAmount) + "}"
 
     #region PROPERTIES
     @property
@@ -30,6 +37,13 @@ class Item:
         self.__name = attributeName + '' + self.baseName
 
     @property
+    def classCode(self) -> str:
+        return self.__classCode
+    @classCode.setter
+    def classCode(self, classCode:str):
+        self.__classCode = classCode
+
+    @property
     def level(self) -> int:
         return self.__level
     @level.setter
@@ -38,43 +52,30 @@ class Item:
             self.__level = level
 
     @property
-    def baseValue(self) -> int:
-        return self.__baseValue
-    @baseValue.setter
-    def baseValue(self, baseValue:int):
-        self.__baseValue = baseValue
-    @property
     def value(self) -> int:
         return self.__value
     @value.setter
     def value(self, attributeValue:int):
-        self.__value = self.baseValue + attributeValue
-    #endregion
+        try:
+            self.__value += attributeValue
+        except:
+            self.__value = attributeValue
 
-class Sword(Item):
-    def __init__(self, roundNum:int):
-        self.basePower = 2
-        super().__init__(roundNum, 'Sword', 2)
-    
-    def genAttribute(self):
-        attribute = genRandAttribute(SwordAttributes)
-        self.name = attribute.name
-        self.value = attribute.value['Value'] * self.level
-        self.power = attribute.value['Power'] * self.level
-    
-    #region PROPERTIES
     @property
-    def basePower(self) -> int:
-        return self.__basePower
-    @basePower.setter
-    def basePower(self, basePower:int):
-        self.__basePower = basePower
+    def stat(self) -> str:
+        return self.__stat
+    @stat.setter
+    def stat(self, stat:str):
+        self.__stat = stat
     @property
-    def power(self) -> int:
-        return self.__power
-    @power.setter
-    def power(self, attributePower:int):
-        self.__power = attributePower + self.basePower
+    def statAmount(self) -> int:
+        return self.__statAmount
+    @statAmount.setter
+    def statAmount(self, attributeStatAmount:int):
+        try:
+            self.__statAmount += attributeStatAmount
+        except:
+            self.__statAmount = 2 + attributeStatAmount
     #endregion
 
 class Shop():
@@ -83,4 +84,4 @@ class Shop():
         self.coins = randint(1, 11 - int(pi[(roundNum % len(pi))])) * roundNum
         self.items = []
         for i in range(3):
-            self.items.append(Sword(roundNum))
+            self.items.append(Item(roundNum, 'Sword', 2))
