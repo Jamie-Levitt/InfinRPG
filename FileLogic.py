@@ -1,6 +1,9 @@
 from __future__ import annotations
-import os, json, sys
+import os, json, sys, lazy_import
 from enum import Enum
+
+from CharacterLogic import Class
+from ItemLogic import Item, Attribute
 
 srcDIR = os.path.realpath(sys.path[0]) #Temporary for testi
 #region PATHS
@@ -8,15 +11,6 @@ dataSourcePath = os.path.join(srcDIR, 'SOURCES')
 baseSourcePath = os.path.join(dataSourcePath, 'BASE')
 modSourcePath = os.path.join(dataSourcePath, 'MODS')
 #endregion
-
-def loadClasses() -> list:
-    classFile = DataLoader.loadJSON('SOURCES' + os.sep + 'BASE' + os.sep + 'classes.json')
-    classes = []
-    for key, data in classFile.items(): classes.append([key, data])
-    return classes
-
-from CharacterLogic import Class
-from ItemLogic import Item, Attribute
 
 #region CLASS TYPES:
 class ClassType(Enum):
@@ -30,12 +24,6 @@ class DataLoader:
         self.classes = []
         self.items = []
         self.attributes = []
-
-        self.checkFileStructure()
-        self.checkIgnore()
-        self.checkBASE()
-        self.loadBASE()
-        self.loadMODS()
     
     def checkIgnore(self):
         ignorePATH = os.path.join(modSourcePath, 'ignore.json')
@@ -51,9 +39,13 @@ class DataLoader:
         if os.path.isfile(baseSourcePath + os.sep + 'classes.json') is False:
             self.makeJSON(baseSourcePath + os.sep + 'classes.json', {"WAR":{"Name": "Warrior", "Base Health": 5, "Stat": "Strength"}, "WIZ":{"Name": "Wizard", "Base Health": 3, "Stat": "Mana"}})
         if os.path.isfile(baseSourcePath + os.sep + 'items.json') is False:
-            self.makeJSON(baseSourcePath + os.sep + 'items.json', {"SWORD":{"Name": "Sword", "Stat": "Strength", "Value": 2, "Rating": 1, "Min Level": 1}})
+            self.makeJSON(baseSourcePath + os.sep + 'items.json', {"SWORD":{"Name": "Sword", "Stat": "Strength", "Value": 2, "Rating": 1, "Min Level": 1}, "STAFF":{"Name": "Staff", "Stat": "Mana", "Value": 2, "Rating": 1, "Min Level": 1}})
         if os.path.isfile(baseSourcePath + os.sep + 'attributes.json') is False:
             self.makeJSON(baseSourcePath + os.sep + 'attributes.json', {"PLACEHOLDER": "I'm a placeholder!"})
+
+    def loadData(self):
+        self.loadBASE()
+        self.loadMODS()
     
     def loadBASE(self):
         classesJSONDATA = self.loadJSON(os.path.join(baseSourcePath, 'classes.json'))
@@ -86,6 +78,9 @@ class DataLoader:
 
     def getItems(self) -> list[type[Item]]:
         return self.items
+    
+    def getClasses(self) -> list[type[Class]]:
+        return self.classes
 
     #region STATIC METHODS
     @staticmethod

@@ -1,10 +1,4 @@
-from enum import Enum
-from random import randint
-
 from Attributes import genRandAttribute, SwordAttributes
-from FileLogic import DataLoader
-
-pi = list('3141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067')
 
 class Attribute:
     def __init__(self, jsonDATA:list):
@@ -12,7 +6,6 @@ class Attribute:
 
 class Item:
     def __init__(self, jsonDATA:list):
-        print(jsonDATA)
         self.refCODE = jsonDATA[0]
         jsonDATA = jsonDATA[1]
         self.baseName = jsonDATA['Name']
@@ -66,6 +59,13 @@ class Item:
     def level(self, level:int):
         if level >= 0:
             self.__level = level
+    @property
+    def minLevel(self) -> int:
+        return self.__minLevel
+    @minLevel.setter
+    def minLevel(self, minLevel:int):
+        if minLevel >= 0:
+            self.__minLevel = minLevel
 
     @property
     def value(self) -> int:
@@ -92,51 +92,12 @@ class Item:
             self.__statAmount += attributeStatAmount
         except:
             self.__statAmount = 2 + attributeStatAmount
+
+    @property
+    def rating(self) -> int:
+        return self.__rating
+    @rating.setter
+    def rating(self, rating:int):
+        if rating >= 0:
+            self.__rating = rating
     #endregion
-
-'''def rollItemList(itemList:list[type[Item]]) -> list[type[Item]]:
-    legalItems = [item for item in itemList if item.]
-    possibleItems = []
-    for item in itemList:
-        for a in attributeEnum:
-            if a is not attribute:
-                for i in range(attribute.value['Rating'] - 1):
-                    possibleAttributes.append(a)
-
-    items = []
-
-    return possibleAttributes[randint(0, len(possibleAttributes) - 1)]
-    for i in range(3):
-        fro'''
-
-class Shop():
-    def __init__(self, roundNum:int, itemList:list[type[Item]]):
-        self.nodeName = 'SHOP'
-        self.coins = randint(1, 11 - int(pi[(roundNum % len(pi))])) * roundNum
-        self.items = rollItemList(itemList)
-    
-    def initNodeFunc(self, playerPurse:int):
-        print("\nYour Purse: {" + str(playerPurse) + "} ----------------------------------\n")
-        print("Welcome to my shop, let me show you my wares ----------------------------\n")
-
-        itemNums = []
-        inpOptions = 'CHOOSE AN OPTION ('
-        for i, item in enumerate(self.items):
-            itemNums.append(str(i))
-            inpAddon = '[' + str(i) + '],' if i < len(self.items) - 1 else '[' + str(i) + '],[INVENTORY],[LEAVE])'
-            inpOptions += inpAddon
-            print('[' + str(i) + ']: ' + item.getStatsRef())
-
-        chosen = False
-        while chosen is False:
-            playerChoice = input(inpOptions).lower()
-            if playerChoice == 'leave':
-                return 'EXIT'
-            elif playerChoice in itemNums:
-                item = self.items[i]
-                if item.value <= playerPurse:
-                    return item
-                else:
-                    print("You can't afford that, please choose another item")
-            else:
-                print("THAT IS NOT A VALID CHOICE, PLEASE RETRY:")

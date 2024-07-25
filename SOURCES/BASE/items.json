@@ -2,6 +2,15 @@
     "SWORD": {
         "Name": "Sword",
         "Stat": "Strength",
-        "Value": 2
+        "Value": 2,
+        "Rating": 3,
+        "Min Level": 1
+    },
+    "STAFF": {
+        "Name": "Staff",
+        "Stat": "Mana",
+        "Value": 2,
+        "Rating": 3,
+        "Min Level": 1
     }
 }

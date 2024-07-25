@@ -1,5 +1,3 @@
-from enum import Enum
-
 from ItemLogic import Item
 
 class Class:
@@ -114,22 +112,3 @@ class Character:
     def health(self, health:int):
         self.__health = health
     #endregion
-
-from FileLogic import loadClasses
-
-def getClassesInfo() -> list[type[Class]]:
-    classInfoList = []
-    for classItem in loadClasses():
-        classInfoList.append(Class(classItem))
-    return classInfoList
-
-def getClassByCode(classCode:str) -> Class:
-    for classItem in loadClasses():
-        if classItem[0] == classCode:
-            return Class(classItem)
-
-def newCharFromClass(classInfo:list, charName:str) -> Character:
-    classData = classInfo[1]
-
-    charClass = Class(classInfo[0], classData['Name'], classData['Base Health'], classData['Stat'])
-    return Character(charName, charClass)

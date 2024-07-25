@@ -1,18 +1,21 @@
-from CharacterLogic import Character, getClassesInfo, getClassByCode
-from FileLogic import DataLoader
-from MapLogic import genPaths
-from ItemLogic import Item
+from __future__ import annotations
+from typing import TYPE_CHECKING, Union
+
+if TYPE_CHECKING:
+    from AppManager import AppManager
+    from MapLogic import Node
 
 class RoundManager:
     def __init__(self):
-        self.round = 0
-        self.dataLoader = DataLoader()
+        pass
 
-    def startUp(self):
+    def setAppManager(self, appManager:AppManager):
+        self.appManager = appManager
+
+    def getPlayer(self, classRefList:list) -> list:
         inpStr = 'Choose your class ('
         classList = []
         classCodeList = []
-        classRefList = getClassesInfo()
         print('Classes Info:')
         for i, classRef in enumerate(classRefList):
             className = classRef.name.upper()
@@ -22,25 +25,19 @@ class RoundManager:
             inpStr += inpAddon
             print('[' + className.upper() + ']')
             print(classRef.getStatsRef())
-
         chosenClass = input(inpStr).lower()
-        if chosenClass in classList:
-            playerClass = getClassByCode(classCodeList[classList.index(chosenClass)])
-        else:
+        if chosenClass not in classList:
             print('THAT IS NOT A VALID CLASS NAME, PLEASE RETRY:')
-            self.startUp()
-
+            self.getPlayer()
         playerName = input('What is your name? ')
-        self.player = Character(playerName, playerClass)        
-        print('And thus begins the journy of ' + self.player.name + ' the ' + self.player.charClass.name)
-
-    def initNewRound(self):
-        self.round = self.round + 1
-        print(str(self.round) + ' | ' + str(self.player.inventory))
+        print('And thus begins the journy of ' + playerName.upper() + ' the ' + chosenClass.upper())
+        return([playerName, classCodeList[classList.index(chosenClass)]])
+    
+    def initNewRound(self, paths:list) -> list[Union[str, Node]]:
+        print(str(self.appManager.round) + ' | ' + str(self.appManager.player.inventory))
         chosen = False
         while chosen is False:
             pathNames = []
-            paths = genPaths(self.round)
             pPPstr = 'Choose a path to follow: ('
             for i, node in enumerate(paths):
                 pathNames.append(node.nodeName.lower())
@@ -53,23 +50,4 @@ class RoundManager:
                 chosen = True
             else:
                 print('THAT IS NOT A VALID PATH NAME, PLEASE RETRY:')
-        response = chosenNode.initNodeFunc(self.player.purse)
-        if type(response) is Item:
-            self.player.addToInventory(response)
-
-    #region PROPERTIES
-    @property
-    def round(self) -> int:
-        return self.__round
-    @round.setter
-    def round(self, round:int):
-        if round >= 0:
-            self.__round = round
-
-    @property
-    def player(self) -> Character:
-        return self.__player
-    @player.setter
-    def player(self, player:Character):
-        self.__player = player
-    #endregion
+        return [playerPathPick, chosenNode]

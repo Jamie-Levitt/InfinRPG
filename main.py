@@ -1,8 +1,4 @@
-from RoundLogic import RoundManager
-
-roundManager = RoundManager()
+from AppManager import AppManager
 
 if __name__ == '__main__':
-    roundManager.startUp()
-    while True:
-        roundManager.initNewRound()
+    appManager = AppManager()
