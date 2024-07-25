@@ -3,8 +3,9 @@ from enum import Enum
 from ItemLogic import Item
 
 class Class:
-    def __init__(self, jsonDATA:dict):
+    def __init__(self, jsonDATA:list):
         self.code = jsonDATA[0]
+        jsonDATA = jsonDATA[1]
         self.name = jsonDATA['Name']
         self.baseHealth = jsonDATA['Base Health']
         self.statName = jsonDATA['Stat']
@@ -119,14 +120,13 @@ from FileLogic import loadClasses
 def getClassesInfo() -> list[type[Class]]:
     classInfoList = []
     for classItem in loadClasses():
-        classData = classItem[1]
-        classInfoList.append(Class(classItem[0], classData['Name'], classData['Base Health'], classData['Stat']))
+        classInfoList.append(Class(classItem))
     return classInfoList
 
 def getClassByCode(classCode:str) -> Class:
     for classItem in loadClasses():
         if classItem[0] == classCode:
-            return Class(classItem[0], classItem[1]['Name'], classItem[1]['Base Health'], classItem[1]['Stat'])
+            return Class(classItem)
 
 def newCharFromClass(classInfo:list, charName:str) -> Character:
     classData = classInfo[1]

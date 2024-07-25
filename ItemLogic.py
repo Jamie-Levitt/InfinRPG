@@ -2,18 +2,24 @@ from enum import Enum
 from random import randint
 
 from Attributes import genRandAttribute, SwordAttributes
+from FileLogic import DataLoader
 
 pi = list('3141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067')
 
 class Attribute:
-    def __init__(self, jsonDATA:dict):
+    def __init__(self, jsonDATA:list):
         pass
 
 class Item:
-    def __init__(self, jsonDATA:dict):
+    def __init__(self, jsonDATA:list):
+        print(jsonDATA)
+        self.refCODE = jsonDATA[0]
+        jsonDATA = jsonDATA[1]
         self.baseName = jsonDATA['Name']
         self.value = jsonDATA['Value']
         self.stat = jsonDATA['Stat']
+        self.rating = jsonDATA['Rating']
+        self.minLevel = jsonDATA['Min Level']
 
     def genAttribute(self):
         att = genRandAttribute(SwordAttributes)
@@ -26,6 +32,13 @@ class Item:
         return "NAME: {" + self.name + "} LEVEL: {" + str(self.level) + "} " + self.stat.upper() + ": {" + str(self.statAmount) + "} PRICE: {" + str(self.value) + "}"
 
     #region PROPERTIES
+    @property
+    def refCode(self) -> str:
+        return self.__refCode
+    @refCode.setter
+    def refCode(self, refCode:str):
+        self.__refCode = refCode
+        
     @property
     def baseName(self) -> str:
         return self.__baseName
@@ -81,13 +94,26 @@ class Item:
             self.__statAmount = 2 + attributeStatAmount
     #endregion
 
+'''def rollItemList(itemList:list[type[Item]]) -> list[type[Item]]:
+    legalItems = [item for item in itemList if item.]
+    possibleItems = []
+    for item in itemList:
+        for a in attributeEnum:
+            if a is not attribute:
+                for i in range(attribute.value['Rating'] - 1):
+                    possibleAttributes.append(a)
+
+    items = []
+
+    return possibleAttributes[randint(0, len(possibleAttributes) - 1)]
+    for i in range(3):
+        fro'''
+
 class Shop():
-    def __init__(self, roundNum:int):
+    def __init__(self, roundNum:int, itemList:list[type[Item]]):
         self.nodeName = 'SHOP'
         self.coins = randint(1, 11 - int(pi[(roundNum % len(pi))])) * roundNum
-        self.items = []
-        for i in range(3):
-            self.items.append(Item(roundNum, 'Sword', 2, 'Power'))
+        self.items = rollItemList(itemList)
     
     def initNodeFunc(self, playerPurse:int):
         print("\nYour Purse: {" + str(playerPurse) + "} ----------------------------------\n")

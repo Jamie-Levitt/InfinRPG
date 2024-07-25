@@ -1,11 +1,12 @@
-from CharacterLogic import Character, Class, getClassesInfo, getClassByCode
+from CharacterLogic import Character, getClassesInfo, getClassByCode
+from FileLogic import DataLoader
 from MapLogic import genPaths
 from ItemLogic import Item
 
 class RoundManager:
     def __init__(self):
         self.round = 0
-        print(self.round)
+        self.dataLoader = DataLoader()
 
     def startUp(self):
         inpStr = 'Choose your class ('
