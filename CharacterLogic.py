@@ -3,11 +3,11 @@ from enum import Enum
 from ItemLogic import Item
 
 class Class:
-    def __init__(self, code:str, name:str, baseHealth:int, statName:str):
-        self.code = code
-        self.name = name
-        self.baseHealth = baseHealth
-        self.statName = statName
+    def __init__(self, jsonDATA:dict):
+        self.code = jsonDATA[0]
+        self.name = jsonDATA['Name']
+        self.baseHealth = jsonDATA['Base Health']
+        self.statName = jsonDATA['Stat']
         self.statAmount = 1
 
     def getStatsRef(self) -> str:

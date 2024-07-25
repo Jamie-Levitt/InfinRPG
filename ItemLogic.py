@@ -5,13 +5,15 @@ from Attributes import genRandAttribute, SwordAttributes
 
 pi = list('3141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067')
 
+class Attribute:
+    def __init__(self, jsonDATA:dict):
+        pass
+
 class Item:
-    def __init__(self, level:int, baseName:str, value:int, stat:str):
-        self.baseName = baseName 
-        self.level = level
-        self.value = value
-        self.stat = stat
-        self.genAttribute()
+    def __init__(self, jsonDATA:dict):
+        self.baseName = jsonDATA['Name']
+        self.value = jsonDATA['Value']
+        self.stat = jsonDATA['Stat']
 
     def genAttribute(self):
         att = genRandAttribute(SwordAttributes)
