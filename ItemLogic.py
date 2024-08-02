@@ -1,10 +1,6 @@
-from Attributes import genRandAttribute, SwordAttributes
+from Attributes import Attributable, genRandAttribute, SwordAttributes
 
-class Attribute:
-    def __init__(self, jsonDATA:list):
-        pass
-
-class Item:
+class Item(Attributable):
     def __init__(self, jsonDATA:list):
         self.refCODE = jsonDATA[0]
         jsonDATA = jsonDATA[1]

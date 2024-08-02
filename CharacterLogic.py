@@ -6,7 +6,9 @@ class Class:
         jsonDATA = jsonDATA[1]
         self.name = jsonDATA['Name']
         self.baseHealth = jsonDATA['Base Health']
-        self.statName = jsonDATA['Stat']
+        statRef = jsonDATA['Stat'].split(' | ')
+        self.statCode = statRef[0]
+        self.statName = statRef[1]
         self.statAmount = 1
 
     def getStatsRef(self) -> str:
@@ -32,6 +34,13 @@ class Class:
     @baseHealth.setter
     def baseHealth(self, baseHealth:int):
         self.__baseHealth = baseHealth
+
+    @property
+    def statCode(self) -> str:
+        return self.__statCode
+    @statCode.setter
+    def statCode(self, statCode:str):
+        self.__statCode = statCode
 
     @property
     def statName(self) -> str:

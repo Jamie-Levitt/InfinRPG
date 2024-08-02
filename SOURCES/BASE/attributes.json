@@ -1,3 +1,26 @@
 {
-    "PLACEHOLDER": "I'm a placeholder!"
+    "CLASS": {
+                "WAR": {
+                        "VIO": {"TARGET": "WAR", "NAME": "Violent", "RATING": 1, "EFFECTS": {"HEALTH": 1, "STR": 1}},
+                        "RUT": {"TARGET": "WAR", "NAME": "Ruthless", "RATING": 2, "EFFECTS": {"STR": 3}},
+                        "REK": {"TARGET": "WAR", "NAME": "Reckless", "RATING": 3, "EFFECTS": {"HEALTH": -1, "STR": 2}}
+                        },
+                "WIZ": {
+                        "WIL": {"TARGET": "WIZ", "NAME": "Wild", "RATING": 1, "EFFECTS": {"MAN": 1}},
+                        "WIS": {"TARGET": "WIZ", "NAME": "Wise", "RATING": 2, "EFFECTS": {"MAN": 2}},
+                        "BOL": {"TARGET": "WIZ", "NAME": "Bold", "RATING": 3, "EFFECTS": {"HEALTH": -1, "MAN": 4}}
+                        }
+            },
+    "WEAPON": {
+                "SWO": {
+                        "BLU": {"TARGET": "SWO", "NAME": "Blunt", "RATING": 1, "EFFECTS": {"STR": -1}},
+                        "SHA": {"TARGET": "SWO", "NAME": "Sharp", "RATING": 2, "EFFECTS": {"STR": 1}},
+                        "LEG": {"TARGET": "SWO", "NAME": "Legendary", "RATING": 3, "EFFECTS": {"STR": 3}}
+                        },
+                "STA": {
+                        "BRI": {"TARGET": "STA", "NAME": "Brittle", "RATING": 1, "EFFECTS": {"MAN": -1}},
+                        "TUN": {"TARGET": "STA", "NAME": "Tuned", "RATING": 2, "EFFECTS": {"MAN": 1}},
+                        "MYT": {"TARGET": "STA", "NAME": "Mythical", "RATING": 3, "EFFECTS": {"MAN": 3}}
+                        }
+            }
 }

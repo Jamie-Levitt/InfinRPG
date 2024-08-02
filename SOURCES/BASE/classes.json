@@ -2,11 +2,11 @@
     "WAR": {
         "Name": "Warrior",
         "Base Health": 5,
-        "Stat": "Strength"
+        "Stat": "STR | Strength"
     },
     "WIZ": {
         "Name": "Wizard",
         "Base Health": 3,
-        "Stat": "Mana"
+        "Stat": "MAN | Mana"
     }
 }
